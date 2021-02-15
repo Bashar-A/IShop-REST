@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const keys = require("./keys");
 
 
-const MODULES = ['users'];
+const MODULES = ['auth','users','attributes'];
 
 module.exports = function createApp() {
   const app = express();

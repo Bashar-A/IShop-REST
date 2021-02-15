@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt')
 const User = require('./model')
-const jwt = require('jsonwebtoken')
-const keys = require('../../keys')
+
 
 async function create(req, res)  {
     try{
@@ -13,7 +12,7 @@ async function create(req, res)  {
         const user = await User.create({...args, password, salt})
         
 
-        const token = jwt.sign({ userId: user.id },keys.JWT_SIGNATURE)
+        const token = user.generateJWT()
 
         res.cookie('token', token, { httpOnly: true })
             
@@ -28,8 +27,9 @@ async function create(req, res)  {
             }
         })
     }catch(e){
-        console.debug(e)
-        res.status(401).send(e)
+        res.status(401).json({
+            error: e.message
+        })
     }
 }
   
