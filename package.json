@@ -1,0 +1,19 @@
+{
+  "name": "ishop-rest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bashar-A/IShop-REST.git"
+  },
+  "author": "Almamma Bashar <basharmamma@hotmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bashar-A/IShop-REST/issues"
+  },
+  "homepage": "https://github.com/Bashar-A/IShop-REST#readme"
+}
