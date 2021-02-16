@@ -29,7 +29,7 @@ async function findAll(req, res)  {
             totalAttributes
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }
@@ -45,7 +45,7 @@ async function create(req, res)  {
             attribute
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }
@@ -59,7 +59,7 @@ async function find(req, res)  {
             attribute
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }
@@ -76,7 +76,7 @@ async function update(req, res)  {
             attribute
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }
@@ -91,7 +91,7 @@ async function remove(req, res)  {
             attribute
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }

@@ -5,10 +5,6 @@ const  {validationResult} = require('express-validator')
 
 async function create(req, res)  {
     try{
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            return res.status(400).json({message: errors.array()[0].msg})
-        }
         const args = req.body.user
         
         const salt = await bcrypt.genSalt(10)
@@ -33,7 +29,7 @@ async function create(req, res)  {
             token
         })
     }catch(e){
-        res.status(401).json({
+        res.status(400).json({
             error: e.message
         })
     }
