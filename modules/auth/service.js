@@ -3,18 +3,19 @@ const bcrypt = require('bcrypt')
 
 async function create(req, res) {
     try{
+        console.debug(req.headers)
         const candidate = req.body.user
         if (!candidate?.email || !candidate?.password || !candidate) {
-            throw new Error('Please specify "email" and "password" fields in body.user')
+            throw new Error('Что-то пошло не так!')
         }
         const user = await User.findOne({email: candidate.email})
         if(!user) throw new Error('Пользователь не найден')
         const password = await bcrypt.hash(candidate.password, user.salt)
         const validate = password === user.password
-        if(!validate) throw new Error('Неверный парль')
+        if(!validate) throw new Error('Неверный пароль')
 
         const token = user.generateJWT()
-        res.cookie('token', token, { httpOnly: true })
+        //res.cookie('token', token, {httpOnly: true })
 
         res.status(200).json({
             message: 'Signin successful',
@@ -22,7 +23,8 @@ async function create(req, res) {
                 id : user._id,
                 email: user.email,
                 name: user.name
-            }
+            },
+            token
         })
     }catch(e){
         res.status(401).json({
@@ -31,15 +33,6 @@ async function create(req, res) {
     }
 }
 
-async function close(req, res) {
-        res.cookie('token', "" ,{ httpOnly: true , maxAge : -1})
-
-        res.status(200).json({
-            message: 'Signout successful',
-        })
-}
-
 module.exports = {
-    create,
-    close
+    create
 };

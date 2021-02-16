@@ -13,7 +13,7 @@ module.exports = function createApp() {
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"
-    );
+    )
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }

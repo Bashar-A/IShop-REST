@@ -1,8 +1,12 @@
 const session = require('./service')
+const passport = require('passport')
+const { configurePassport } = require('./jwt')
 
 module.exports = {
     configure(app) {
-        app.post('/api/login', session.create);
-        app.get('/api/logout', session.close);
+        configurePassport(passport, app)
+        app.use(passport.initialize())
+
+        app.post('/api/login', session.create)
     }
 }

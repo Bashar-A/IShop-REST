@@ -1,9 +1,14 @@
 const bcrypt = require('bcrypt')
 const User = require('./model')
+const  {validationResult} = require('express-validator')
 
 
 async function create(req, res)  {
     try{
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({message: errors.array()[0].msg})
+        }
         const args = req.body.user
         
         const salt = await bcrypt.genSalt(10)
@@ -14,7 +19,7 @@ async function create(req, res)  {
 
         const token = user.generateJWT()
 
-        res.cookie('token', token, { httpOnly: true })
+        //res.cookie('token', token, { httpOnly: true })
             
         user.save()
 
@@ -24,7 +29,8 @@ async function create(req, res)  {
                 id : user._id,
                 email: user.email,
                 name: user.name
-            }
+            },
+            token
         })
     }catch(e){
         res.status(401).json({
