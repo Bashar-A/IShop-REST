@@ -15,7 +15,7 @@ function configurePassport(passport, app) {
                 return done(null, false)
             }
             if (user?.isAdmin) {
-                return done(null, user)
+                return done(null, user.toJSON())
             } else {
                 return done(null, false)
             }

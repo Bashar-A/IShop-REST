@@ -5,6 +5,8 @@ const Product = new Schema({
     priceExVat: Number,
     promoPrice: Number,
     category: {type: Schema.Types.ObjectId, ref: 'Category'},
+    vendor: {type: Schema.Types.ObjectId, ref: 'Vendor'},
+    model: {type: Schema.Types.ObjectId, ref: 'Model'},
     attributes:[
         {
             attribute: {type: Schema.Types.ObjectId, ref: 'Attribute'},

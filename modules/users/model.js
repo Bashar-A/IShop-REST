@@ -17,6 +17,14 @@ const User = new Schema({
     timestamps: true
 })
 
+User.methods.toJSON = function() {
+    return {
+        id: this._id,
+        email: this.email,
+        name: this.name
+    }
+}
+
 User.methods.generateJWT = function() {
     const today = new Date()
     const expirationDate = new Date(today)

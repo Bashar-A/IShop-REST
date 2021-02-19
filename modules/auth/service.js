@@ -19,11 +19,7 @@ async function create(req, res) {
 
         res.status(200).json({
             message: 'Signin successful',
-            user:{
-                id : user._id,
-                email: user.email,
-                name: user.name
-            },
+            user: user.toJSON(),
             token
         })
     }catch(e){

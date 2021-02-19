@@ -1,4 +1,4 @@
-const Attribute = require('./model')
+const Category = require('./model')
 
 
 async function findAll(req, res)  {
@@ -7,7 +7,7 @@ async function findAll(req, res)  {
             filter = null,
             skip = null,
             limit = null
-        } = req.body?.attributes?.options || {}
+        } = req.body?.categories?.options || {}
 
         if(filter)Object.keys(filter).forEach(filterKey => {
             Object.keys(filter[filterKey]).forEach(key => {
@@ -16,17 +16,17 @@ async function findAll(req, res)  {
             })
         })
 
-        const attributes = await Attribute.find(
+        const categories = await Category.find(
             filter,
             null,
             {skip,limit,}
             )
 
-        const totalAttributes = Object.keys(attributes).length
+        const totalCategories = Object.keys(categories).length
 
         res.status(200).json({
-            attributes,
-            totalAttributes
+            categories,
+            totalcategories
         })
     }catch(e){
         res.status(400).json({
@@ -37,12 +37,12 @@ async function findAll(req, res)  {
 
 async function create(req, res)  {
     try{
-        const input = req.body?.attribute
-        const attribute = await Attribute.create(input)
-        await attribute.save()
+        const input = req.body?.category
+        const category = await Category.create(input)
+        await category.save()
 
         res.status(200).json({
-            attribute
+            category
         })
     }catch(e){
         res.status(400).json({
@@ -54,9 +54,9 @@ async function create(req, res)  {
 async function find(req, res)  {
     try{
         const id = req.query.id
-        const attribute = await Attribute.findById(id)
+        const category = await Category.findById(id)
         res.status(200).json({
-            attribute
+            category
         })
     }catch(e){
         res.status(400).json({
@@ -68,12 +68,12 @@ async function find(req, res)  {
 async function update(req, res)  {
     try{
         const id = req.query.id
-        const input = req.body?.attribute
-        const attribute = await Attribute.findById(id)
-        attribute.set(input)
-        await attribute.save()
+        const input = req.body?.category
+        const category = await Category.findById(id)
+        category.set(input)
+        await category.save()
         res.status(200).json({
-            attribute
+            category
         })
     }catch(e){
         res.status(400).json({
@@ -85,10 +85,10 @@ async function update(req, res)  {
 async function remove(req, res)  {
     try{
         const id = req.query.id
-        const attribute = await Attribute.findByIdAndDelete(id)
+        const category = await Category.findByIdAndDelete(id)
 
         res.status(200).json({
-            attribute
+            category
         })
     }catch(e){
         res.status(400).json({
