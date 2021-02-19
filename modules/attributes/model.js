@@ -1,11 +1,14 @@
-const {Schema, model} = require('mongoose')
+const { Schema, model } = require("mongoose");
 
-const Attribute = new Schema({
+const Attribute = new Schema(
+  {
     name: String,
     description: String,
-    values: [String]
-},{
-    timestamps: true
-})
+    values: [String],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = model('Attribute', Attribute)
+module.exports = model("Attribute", Attribute);

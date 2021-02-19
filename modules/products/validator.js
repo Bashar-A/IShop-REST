@@ -32,3 +32,25 @@ exports.addProductValidator = [
     next();
   },
 ];
+
+exports.updateProductValidator = [
+  async function (req, res, next) {
+    req.body.product = JSON.parse(req.body?.product);
+    next();
+  },
+
+  check("product.name")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Имя товара должно состоять минимум из 2 букв"),
+
+  async function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.files.forEach(async file => {
+        await deleteFile(file);
+      });
+      return res.status(400).json({ message: errors.array()[0].msg });
+    }
+    next();
+  },
+];

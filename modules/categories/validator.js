@@ -22,3 +22,16 @@ exports.addCategoryValidator = [
         next()
     }
 ]
+
+exports.updateCategoryValidator = [
+    check('category.name')
+        .isLength({min: 2, max: 64}).withMessage("Имя категории должно состоять минимум из 2 букв"),
+    
+    async function(req, res, next){
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.status(400).json({message: errors.array()[0].msg})
+        }
+        next()
+    }
+]

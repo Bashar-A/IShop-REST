@@ -1,6 +1,7 @@
 const Vendor = require("./model");
+const Product = require("../products/model");
 const keys = require("../../keys");
-const {deleteFile} = require('../../utils/upload')
+const { deleteFile } = require("../../utils/upload");
 
 async function findAll(req, res) {
   try {
@@ -33,9 +34,9 @@ async function findAll(req, res) {
 async function create(req, res) {
   try {
     const image =
-      keys.UPLOAD_DIR + (req.file ? req.file.filename : "default.jpg");
+      keys.UPLOAD_DIR + (req.file ? req.file.filename : "default_vendor.jpg");
     const input = req.body?.vendor;
-    const vendor = await Vendor.create({...input, image});
+    const vendor = await Vendor.create({ ...input, image });
     await vendor.save();
 
     res.status(200).json({
@@ -67,12 +68,12 @@ async function update(req, res) {
     const id = req.query.id;
     const input = req.body?.vendor;
     const vendor = await Vendor.findById(id);
-    const image = vendor.image
-    if(req.file){
-      image = keys.UPLOAD_DIR + (req.file ? req.file.filename : "default.jpg");
-      deleteFile({path: image})
+    const image = vendor.image;
+    if (req.file) {
+      image = keys.UPLOAD_DIR + (req.file ? req.file.filename : "default_vendor.jpg");
+      deleteFile({ path: image });
     }
-    vendor.set({...input, image});
+    vendor.set({ ...input, image });
     await vendor.save();
     res.status(200).json({
       vendor,
@@ -87,10 +88,19 @@ async function update(req, res) {
 async function remove(req, res) {
   try {
     const id = req.query.id;
-    const vendor = await Vendor.findByIdAndDelete(id);
-    if(vendor)deleteFile({path: vendor.image})
+    const force = req.query.force;
+    const vendor = await Vendor.findById(id);
+
+    const products = await Product.find({ vendor: vendor._id });
+    if (!products || force === "true") {
+      if (vendor) {
+        vendor.deleteVendor();
+      }
+    }
+
     res.status(200).json({
       vendor,
+      products,
     });
   } catch (e) {
     res.status(400).json({

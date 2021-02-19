@@ -1,5 +1,7 @@
 const {Schema, model} = require('mongoose')
 
+
+
 const Order = new Schema({
     customer: {type: Schema.Types.ObjectId, ref: 'Customer'},
     date: {type: Date, default: Date.now()},
@@ -16,4 +18,5 @@ const Order = new Schema({
     timestamps: true
 })
 
+exports.PaymentTypes = ['Картой','Наличными']
 module.exports = model('Order', Order)

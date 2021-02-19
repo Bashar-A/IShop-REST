@@ -1,13 +1,11 @@
 const { check } = require("express-validator");
 const Vendor = require("./model");
 const { validationResult } = require("express-validator");
-const {deleteFile} = require('../../utils/upload')
-
+const { deleteFile } = require("../../utils/upload");
 
 exports.addVendorValidator = [
   async function (req, res, next) {
-    if(req.body?.vendor)
-      req.body.vendor = JSON.parse(req.body?.vendor);
+    if (req.body?.vendor) req.body.vendor = JSON.parse(req.body?.vendor);
     next();
   },
 
@@ -26,7 +24,27 @@ exports.addVendorValidator = [
   async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if(req.file)await deleteFile(req.file);
+      if (req.file) await deleteFile(req.file);
+      return res.status(400).json({ message: errors.array()[0].msg });
+    }
+    next();
+  },
+];
+
+exports.updateVendorValidator = [
+  async function (req, res, next) {
+    if (req.body?.vendor) req.body.vendor = JSON.parse(req.body?.vendor);
+    next();
+  },
+
+  check("vendor.name")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Имя производителя должно состоять минимум из 2 букв"),
+
+  async function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      if (req.file) await deleteFile(req.file);
       return res.status(400).json({ message: errors.array()[0].msg });
     }
     next();

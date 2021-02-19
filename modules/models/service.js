@@ -46,7 +46,7 @@ async function create(req, res) {
 
 async function find(req, res) {
   try {
-    const id = req.query.id;
+    const id = req.query?.id;
     const model = await Model.findById(id);
     res.status(200).json({
       model,
@@ -60,7 +60,7 @@ async function find(req, res) {
 
 async function update(req, res) {
   try {
-    const id = req.query.id;
+    const id = req.query?.id;
     const input = req.body?.model;
     const model = await Model.findById(id);
     model.set(input);
@@ -77,7 +77,7 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    const id = req.query.id;
+    const id = req.query?.id;
     const model = await Model.findByIdAndDelete(id);
 
     res.status(200).json({

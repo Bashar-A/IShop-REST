@@ -20,6 +20,8 @@ module.exports = {
     app.patch(
       "/api/vendor",
       passport.authenticate("jwt", { session: false }),
+      uploadFile,
+      validators.updateVendorValidator,
       vendors.update
     );
 

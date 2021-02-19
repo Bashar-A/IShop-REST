@@ -1,7 +1,7 @@
 const products = require("./service");
 const validators = require("./validator");
 const passport = require("passport");
-const {uploadFiles} = require("../../utils/upload");
+const { uploadFiles } = require("../../utils/upload");
 
 module.exports = {
   configure(app) {
@@ -21,7 +21,7 @@ module.exports = {
       "/api/product",
       passport.authenticate("jwt", { session: false }),
       uploadFiles,
-      validators.addProductValidator,
+      validators.updateProductValidator,
       products.update
     );
 

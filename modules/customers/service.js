@@ -1,9 +1,9 @@
-const Attribute = require("./model");
+const Customer = require("./model");
 
 async function findAll(req, res) {
   try {
     const { filter = null, skip = null, limit = null } =
-      req.body?.attributes?.options || {};
+      req.body?.customers?.options || {};
 
     if (filter)
       Object.keys(filter).forEach((filterKey) => {
@@ -13,13 +13,13 @@ async function findAll(req, res) {
         });
       });
 
-    const attributes = await Attribute.find(filter, null, { skip, limit });
+    const customers = await Customer.find(filter, null, { skip, limit });
 
-    const totalAttributes = Object.keys(attributes).length;
+    const totalCustomers = Object.keys(customers).length;
 
     res.status(200).json({
-      attributes,
-      totalAttributes,
+      customers,
+      totalCustomers,
     });
   } catch (e) {
     res.status(400).json({
@@ -30,12 +30,12 @@ async function findAll(req, res) {
 
 async function create(req, res) {
   try {
-    const input = req.body?.attribute;
-    const attribute = await Attribute.create(input);
-    await attribute.save();
+    const input = req.body?.customer;
+    const customer = await Customer.create(input);
+    await customer.save();
 
     res.status(200).json({
-      attribute,
+      customer,
     });
   } catch (e) {
     res.status(400).json({
@@ -46,10 +46,10 @@ async function create(req, res) {
 
 async function find(req, res) {
   try {
-    const id = req.query.id;
-    const attribute = await Attribute.findById(id);
+    const id = req.query?.id;
+    const customer = await Customer.findById(id);
     res.status(200).json({
-      attribute,
+      customer,
     });
   } catch (e) {
     res.status(400).json({
@@ -60,13 +60,13 @@ async function find(req, res) {
 
 async function update(req, res) {
   try {
-    const id = req.query.id;
-    const input = req.body?.attribute;
-    const attribute = await Attribute.findById(id);
-    attribute.set(input);
-    await attribute.save();
+    const id = req.query?.id;
+    const input = req.body?.customer;
+    const customer = await Customer.findById(id);
+    customer.set(input);
+    await customer.save();
     res.status(200).json({
-      attribute,
+      customer,
     });
   } catch (e) {
     res.status(400).json({
@@ -77,11 +77,11 @@ async function update(req, res) {
 
 async function remove(req, res) {
   try {
-    const id = req.query.id;
-    const attribute = await Attribute.findByIdAndDelete(id);
+    const id = req.query?.id;
+    const customer = await Customer.findByIdAndDelete(id);
 
     res.status(200).json({
-      attribute,
+      customer,
     });
   } catch (e) {
     res.status(400).json({

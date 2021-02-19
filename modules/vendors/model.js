@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const {deleteFile} = require("../../utils/upload")
 
 const Vendors = new Schema(
   {
@@ -10,5 +11,13 @@ const Vendors = new Schema(
     timestamps: true,
   }
 );
+
+Vendors.methods.deleteVendor = function () {
+  this.products.forEach((product) => {
+    product.deleteProduct();
+  });
+  deleteFile({ path: vendor.image });
+  this.delete();
+};
 
 module.exports = model("Vendors", Vendors);

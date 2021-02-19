@@ -1,31 +1,31 @@
-const attributes = require("./service");
+const customers = require("./service");
 const validators = require("./validator");
 const passport = require("passport");
 
 module.exports = {
   configure(app) {
-    app.get("/api/attributes", attributes.findAll);
+    app.get("/api/customers", customers.findAll);
 
     app.post(
-      "/api/attribute",
+      "/api/customer",
       passport.authenticate("jwt", { session: false }),
-      validators.addAttributeValidator,
-      attributes.create
+      validators.addCustomerValidator,
+      customers.create
     );
 
-    app.get("/api/attribute", attributes.find);
+    app.get("/api/customer", customers.find);
 
     app.patch(
-      "/api/attribute",
+      "/api/customer",
       passport.authenticate("jwt", { session: false }),
-      validators.addAttributeValidator,
-      attributes.update
+      validators.updateCustomerValidator,
+      customers.update
     );
 
     app.delete(
-      "/api/attribute",
+      "/api/customer",
       passport.authenticate("jwt", { session: false }),
-      attributes.remove
+      customers.remove
     );
   },
 };

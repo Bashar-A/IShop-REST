@@ -16,6 +16,7 @@ module.exports = {
 
     app.patch('/api/model', 
       passport.authenticate('jwt', {session: false}), 
+      validators.updateModelValidator,
       models.update
     )
 

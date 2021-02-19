@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const keys = require("./keys");
 const cors = require('cors')
 
-const MODULES = ["auth", "users", "attributes", "products", "categories","vendors"];
+const MODULES = ["auth", "users", "attributes", "products", "categories","vendors", "orders"];
 global.__basedir = __dirname;
 
 

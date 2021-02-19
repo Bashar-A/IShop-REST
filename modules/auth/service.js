@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 
 async function create(req, res) {
     try{
-        console.debug(req.headers)
         const candidate = req.body.user
         if (!candidate?.email || !candidate?.password || !candidate) {
             throw new Error('Что-то пошло не так!')
