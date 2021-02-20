@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
-const {deleteFile} = require("../../utils/upload")
+const { deleteFile } = require("../../utils/upload");
+const keys = require("../../keys");
 
 const Vendors = new Schema(
   {
@@ -12,12 +13,17 @@ const Vendors = new Schema(
   }
 );
 
-Vendors.methods.deleteVendor = function () {
-  this.products.forEach((product) => {
+Vendors.methods.deleteVendor = async function () {
+  this.products?.forEach((product) => {
     product.deleteProduct();
   });
-  deleteFile({ path: vendor.image });
+  this.deleteImage(this.image);
   this.delete();
+};
+
+Vendors.methods.deleteImage = async function (image) {
+  if (image === keys.UPLOAD_DIR + "default.jpg") return;
+  deleteFile({ path: image });
 };
 
 module.exports = model("Vendors", Vendors);

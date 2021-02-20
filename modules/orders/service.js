@@ -1,4 +1,5 @@
 const Order = require("./model");
+const Customer = require("../customers/model");
 
 async function findAll(req, res) {
   try {
@@ -33,9 +34,19 @@ async function create(req, res) {
     const { paymentType, address, comments, orderItems } = req.body?.order;
     const customerInput = req.body?.customer;
 
-    //TODO
+    const customer = await Customer.create(customerInput);
 
-    const order = await Order.create(input);
+    const order = await Order.create({
+      customer: customer._id,
+      paymentType,
+      address,
+      comments,
+      orderItems,
+    });
+    order.calculateOrder()
+
+
+
     await order.save();
 
     res.status(200).json({

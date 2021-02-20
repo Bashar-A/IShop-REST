@@ -20,6 +20,18 @@ exports.addOrderValidator = [
     }
   }),
 
+  check("customer.firstname")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Имя должно состоять минимум из 2 букв"),
+
+  check("customer.lastname")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Фамилия должна состоять минимум из 2 букв"),
+
+  check("customer.phone")
+    .isMobilePhone("ru-RU")
+    .withMessage("Неправильный номер телефона"),
+
   async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -45,6 +57,18 @@ exports.updateOrderValidator = [
       console.log(e);
     }
   }),
+
+  check("customer.firstname")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Имя должно состоять минимум из 2 букв"),
+
+  check("customer.lastname")
+    .isLength({ min: 2, max: 64 })
+    .withMessage("Фамилия должна состоять минимум из 2 букв"),
+
+  check("customer.phone")
+    .isMobilePhone("ru-RU")
+    .withMessage("Неправильный номер телефона"),
 
   async function (req, res, next) {
     const errors = validationResult(req);

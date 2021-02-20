@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const {deleteFile} = require("../../utils/upload")
+const { deleteFile } = require("../../utils/upload");
 
 const Product = new Schema(
   {
@@ -24,11 +24,20 @@ const Product = new Schema(
   }
 );
 
-Product.methods.deleteProduct = function(){
-    this.images.forEach((image) => {
-        deleteFile({ path: image });
-      });
-      this.delete();
-}
+Product.methods.getCurrentPrice = async function () {
+  return promoPrice? promoPrice: priceExVat
+};
+
+Product.methods.deleteProduct = async function () {
+  this.images.forEach((image) => {
+    this.deleteImage(image);
+  });
+  this.delete();
+};
+
+Product.methods.deleteImage = async function (image) {
+  if (image === keys.UPLOAD_DIR + "default.jpg") return;
+  deleteFile({ path: image });
+};
 
 module.exports = model("Product", Product);

@@ -12,7 +12,6 @@ module.exports = {
 
     app.post(
       "/api/order",
-      passport.authenticate("jwt", { session: false }),
       validators.addOrderValidator,
       orders.create
     );

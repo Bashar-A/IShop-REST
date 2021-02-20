@@ -36,8 +36,7 @@ async function create(req, res) {
     req.files.forEach((file) => {
       images.push(keys.UPLOAD_DIR + file.filename);
     });
-    if (images.length === 0)
-      images.push(keys.UPLOAD_DIR + "default_product.jpg");
+    if (images.length === 0) images.push(keys.UPLOAD_DIR + "default.jpg");
     const input = req.body?.product;
     const product = await Product.create({ ...input, images });
     await product.save();
@@ -71,18 +70,19 @@ async function update(req, res) {
     const id = req.query?.id;
     const input = req.body?.product;
     const product = await Product.findById(id);
+    if (product) {
+      product.images.forEach((image) => {
+        if (!input.images.includes(image)) product.deleteImage(image);
+      });
+      req.files.forEach((file) => {
+        input.images.push(keys.UPLOAD_DIR + file.filename);
+      });
+      if (input.images.length === 0)
+        images.push(keys.UPLOAD_DIR + "default.jpg");
 
-    product.images.forEach((image) => {
-      if (!input.images.includes(image)) deleteFile({ path: image });
-    });
-    req.files.forEach((file) => {
-      input.images.push(keys.UPLOAD_DIR + file.filename);
-    });
-    if (input.images.length === 0)
-      images.push(keys.UPLOAD_DIR + "default_product.jpg");
-
-    product.set(input);
-    await product.save();
+      product.set(input);
+      await product.save();
+    }
     res.status(200).json({
       product,
     });
@@ -96,11 +96,9 @@ async function update(req, res) {
 async function remove(req, res) {
   try {
     const id = req.query?.id;
-    const product = await Product.findByIdAndDelete(id);
-    if (products) {
-      product.images.forEach((image) => {
-        deleteFile({ path: image });
-      });
+    const product = await Product.findById(id);
+    if (product) {
+      product.deleteProduct();
     }
 
     res.status(200).json({

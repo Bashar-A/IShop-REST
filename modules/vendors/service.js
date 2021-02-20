@@ -34,7 +34,7 @@ async function findAll(req, res) {
 async function create(req, res) {
   try {
     const image =
-      keys.UPLOAD_DIR + (req.file ? req.file.filename : "default_vendor.jpg");
+      keys.UPLOAD_DIR + (req.file ? req.file.filename : "default.jpg");
     const input = req.body?.vendor;
     const vendor = await Vendor.create({ ...input, image });
     await vendor.save();
@@ -68,10 +68,11 @@ async function update(req, res) {
     const id = req.query.id;
     const input = req.body?.vendor;
     const vendor = await Vendor.findById(id);
-    const image = vendor.image;
+    let image = vendor?.image;
     if (req.file) {
-      image = keys.UPLOAD_DIR + (req.file ? req.file.filename : "default_vendor.jpg");
-      deleteFile({ path: image });
+      vendor.deleteImage(image);
+      image =
+        keys.UPLOAD_DIR + (req.file ? req.file.filename : "default.jpg");
     }
     vendor.set({ ...input, image });
     await vendor.save();
@@ -91,8 +92,8 @@ async function remove(req, res) {
     const force = req.query.force;
     const vendor = await Vendor.findById(id);
 
-    const products = await Product.find({ vendor: vendor._id });
-    if (!products || force === "true") {
+    const products = await Product.find({ vendor: id });
+    if (products.length === 0 || force === "true") {
       if (vendor) {
         vendor.deleteVendor();
       }

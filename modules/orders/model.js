@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose')
+const Product = require('../products')
 
 
 
@@ -18,5 +19,16 @@ const Order = new Schema({
     timestamps: true
 })
 
+Order.methods.calculateOrder = async function(){
+    this.orderSum = 0
+    this.orderItems.forEach(item => {
+        const price = Product.findById(item.product).getCurrentPrice()
+        this.orderSum += price * item.quantity
+    });
+}
+
+
+//TODO
+exports.OrderStatuses = []
 exports.PaymentTypes = ['Картой','Наличными']
 module.exports = model('Order', Order)
